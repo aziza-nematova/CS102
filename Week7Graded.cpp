@@ -192,3 +192,25 @@ double calculateTotal(int items, double price) {
 }
 
 //Parking
+//formula: total = (hour-2)* $2; if total>0: total+=(hour-5)*$3
+
+// Function declaration
+double calculateTotal(int hours);
+
+int main (){
+    int hours, price;
+    cout << "Enter number of ours you parked a car: ";
+    cin >> hours;
+    price = calculateTotal(hours);
+    cout << "Thanks for parking. The total is: " << price << endl;
+    
+}
+
+// Function definition
+double calculateTotal(int hours) {
+    int total = (hours-2)* 2; 
+    if (total>0){
+        total+=(hours-5)*3; // because $2 are alreaddy added in the first assignment of total; more $3 when exceeded 5 hrs;
+    };
+    return total;
+}
