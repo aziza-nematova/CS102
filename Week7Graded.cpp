@@ -77,10 +77,6 @@ void checkBalance(double balance) {
 
 
 // Task: Movie Booking
-
-#include <iostream>
-using namespace std;
-
 // Function declaration
 double calculateTotal(int tickets, double price);
 
@@ -136,3 +132,63 @@ int main() {
 double calculateTotal(int tickets, double price) {
     return tickets * price;
 }
+
+
+// //Restaurant Bookung
+// Function declaration
+double calculateTotal(int items, double price);
+
+int main() {
+    int choice, items;
+    double total;
+    char again;
+
+    do {
+        cout << "\nMENU\n";
+        cout << "1. Drink - $8\n";
+        cout << "2. Salad - $10\n";
+        cout << "3. Main Food - $12\n";
+        cout << "Enter your selection (1-3): ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter quantity for Drink: ";
+                cin >> items;
+                total = calculateTotal(items, 8.0);
+                cout << "Total cost: $" << total << endl;
+                break;
+
+            case 2:
+                cout << "Enter number of tickets for Movie B: ";
+                cin >> items;
+                total = calculateTotal(items, 10.0);
+                cout << "Total cost: $" << total << endl;
+                break;
+
+            case 3:
+                cout << "Enter number of tickets for Movie C: ";
+                cin >> items;
+                total = calculateTotal(items, 12.0);
+                cout << "Total cost: $" << total << endl;
+                break;
+
+            default:
+                cout << "Invalid choice. Please select 1–3.\n";
+        }
+
+        cout << "\nWould you like to book another item? (Y/N): ";
+        cin >> again;
+
+    } while (again == 'Y' || again == 'y');
+
+    cout << "\nThanks for booking! BON APPETITE!\n";
+    return 0;
+}
+
+// Function definition
+double calculateTotal(int items, double price) {
+    return items * price;
+}
+
+//Parking
