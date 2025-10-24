@@ -101,6 +101,15 @@ long long power_fast(long long x, long long y) {
     }
 }
 
+// Josephus
+
+int J(int n, int k){
+    if (n==1) 
+    { return 1;} else {
+        return (J(n-1, k)+k-1)%n+1;
+    }
+}
+
 // MAIN (I used one main for all the problems, because I use an online compiler)
 int main() {
     cout << "Problem 1 (power_simple)\n";
@@ -142,5 +151,8 @@ int main() {
     cout << "2^8 = " << power_fast(2, 8) << "\n";
     cout << "3^5 = " << power_fast(3, 5) << "\n";
 
+    cout << "Problem Josephus \n";
+    cout << J(5, 2) << "\n";
+    
     return 0;
 }
