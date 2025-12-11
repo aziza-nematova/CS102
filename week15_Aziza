@@ -1,0 +1,226 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+// Problem 1
+void reverse_file_content() {
+    FILE *input = fopen("input.txt", "r");
+    FILE *output = fopen("reverse.txt", "w");
+    if (!input || !output) {
+        printf("Error opening file.\n");
+        return;
+    }
+    fseek(input, 0, SEEK_END);
+    long length = ftell(input);
+    for (long i = length - 1; i >= 0; i--) {
+        fseek(input, i, SEEK_SET);
+        fputc(fgetc(input), output);
+    }
+    fclose(input);
+    fclose(output);
+}
+
+// Problem 2
+struct Student {
+    char name[50];
+    int marks[5];
+};
+
+void calculate_average(struct Student s) {
+    int sum = 0;
+    for (int i = 0; i < 5; i++) sum += s.marks[i];
+    printf("Average = %d\n", sum / 5);
+}
+
+// Problem 3
+int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+
+void write_factorial(int n) {
+    FILE *f = fopen("factorial.txt", "w");
+    fprintf(f, "%d", factorial(n));
+    fclose(f);
+}
+
+// Problem 4
+void merge_files() {
+    FILE *f1 = fopen("file1.txt", "r");
+    FILE *f2 = fopen("file2.txt", "r");
+    FILE *out = fopen("merged.txt", "w");
+    if (!f1 || !f2 || !out) {
+        printf("Error opening files.\n");
+        return;
+    }
+    int a, b;
+    int read1 = fscanf(f1, "%d", &a);
+    int read2 = fscanf(f2, "%d", &b);
+    while (read1 == 1 && read2 == 1) {
+        if (a < b) {
+            fprintf(out, "%d ", a);
+            read1 = fscanf(f1, "%d", &a);
+        } else {
+            fprintf(out, "%d ", b);
+            read2 = fscanf(f2, "%d", &b);
+        }
+    }
+    while (read1 == 1) {
+        fprintf(out, "%d ", a);
+        read1 = fscanf(f1, "%d", &a);
+    }
+    while (read2 == 1) {
+        fprintf(out, "%d ", b);
+        read2 = fscanf(f2, "%d", &b);
+    }
+    fclose(f1); fclose(f2); fclose(out);
+}
+
+// Problem 5
+struct Book {
+    char title[100];
+    char author[100];
+    float price;
+};
+
+void update_price(struct Book *b, float new_price) {
+    b->price = new_price;
+}
+
+// Problem 6
+int count_lines_with_word(char *filename, char *word) {
+    FILE *f = fopen(filename, "r");
+    if (!f) return -1;
+    char line[500];
+    int count = 0;
+    while (fgets(line, sizeof(line), f)) {
+        if (strstr(line, word)) count++;
+    }
+    fclose(f);
+    return count;
+}
+
+// Problem 7
+struct BankAccount {
+    float balance;
+};
+
+void deposit(struct BankAccount *acc, float amount, FILE *log) {
+    acc->balance += amount;
+    fprintf(log, "Deposit: %.2f\n", amount);
+}
+
+void withdraw(struct BankAccount *acc, float amount, FILE *log) {
+    if (acc->balance >= amount) {
+        acc->balance -= amount;
+        fprintf(log, "Withdraw: %.2f\n", amount);
+    }
+}
+
+// Problem 8
+int recursive_sum(FILE *f) {
+    int num;
+    if (fscanf(f, "%d", &num) != 1) return 0;
+    return num + recursive_sum(f);
+}
+
+// Problem 9
+struct StudentRecord {
+    char name[50];
+    float gpa;
+};
+
+void top_three_students() {
+    struct StudentRecord students[5];
+    FILE *f = fopen("students.txt", "r");
+    if (!f) return;
+    for (int i = 0; i < 5; i++) {
+        fscanf(f, "%s %f", students[i].name, &students[i].gpa);
+    }
+    fclose(f);
+    for (int i = 0; i < 5; i++) {
+        for (int j = i + 1; j < 5; j++) {
+            if (students[i].gpa < students[j].gpa) {
+                struct StudentRecord temp = students[i];
+                students[i] = students[j];
+                students[j] = temp;
+            }
+        }
+    }
+    for (int i = 0; i < 3; i++) {
+        printf("%s %.1f\n", students[i].name, students[i].gpa);
+    }
+}
+
+// Problem 10
+struct Product {
+    int id;
+    char name[50];
+    float price;
+};
+
+void append_products() {
+    FILE *f = fopen("inventory.txt", "a");
+    if (!f) return;
+    struct Product p;
+    for (int i = 0; i < 3; i++) {
+        printf("Enter id, name, price: ");
+        scanf("%d %s %f", &p.id, p.name, &p.price);
+        fprintf(f, "%d %s %.2f\n", p.id, p.name, p.price);
+    }
+    fclose(f);
+}
+
+// Main driver
+int main() {
+    // Problem 1
+    reverse_file_content();
+
+    // Problem 2
+    struct Student s = {"Ali", {80, 75, 90, 85, 70}};
+    calculate_average(s);
+
+    // Problem 3
+    int n = 5;
+    write_factorial(n);
+
+    // Problem 4
+    merge_files();
+
+    // Problem 5
+    struct Book bk = {"C Programming", "Author", 50.0};
+    update_price(&bk, 60.0);
+    printf("Updated price: %.2f\n", bk.price);
+
+    // Problem 6
+    int magic_count = count_lines_with_word("story.txt", "magic");
+    printf("Lines with 'magic': %d\n", magic_count);
+
+    // Problem 7
+    struct BankAccount acc = {1000.0};
+    FILE *log = fopen("accounts.txt", "w");
+    if (log) {
+        deposit(&acc, 500.0, log);
+        withdraw(&acc, 200.0, log);
+        fprintf(log, "New balance: %.2f\n", acc.balance);
+        fclose(log);
+    }
+    printf("New balance: %.2f\n", acc.balance);
+
+    // Problem 8
+    FILE *num_file = fopen("numbers.txt", "r");
+    if (num_file) {
+        int sum = recursive_sum(num_file);
+        printf("Sum: %d\n", sum);
+        fclose(num_file);
+    }
+
+    // Problem 9
+    top_three_students();
+
+    // Problem 10
+    append_products();
+
+    return 0;
+}
